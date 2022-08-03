@@ -74,6 +74,6 @@ textarea {
   display: none;
 }
 
-#errorMessage {
+.ErrorMessage {
   color: red;
 }

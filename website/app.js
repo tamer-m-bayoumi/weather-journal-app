@@ -1,7 +1,8 @@
 /* Global Variables */
 // Personal API Key for OpenWeatherMap API
-const apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
-const apiKey = "&appid=f41ba07833ed8d0b19ed85241f73b85e";
+const apiUrl =
+  "https://api.openweathermap.org/data/2.5/weather?&units=imperial";
+const apiKey = "&appid={YOUR_APP_Key}";
 const postWeatherEntryUrl = "/addWeatherEntry";
 const getRecentWeatherEntryUrl = "/getRecentWeatherEntry";
 const zipCodeQuery = "&zip={code},us";
@@ -9,6 +10,9 @@ const zipCodeQuery = "&zip={code},us";
 /* Function called by event listener */
 /* Function to GET Web API Data*/
 const getWeatherData = async (e) => {
+  if (!validateData()) {
+    return;
+  }
   const zipCode = document.querySelector("#zip").value;
   const apiUrlWithParamters =
     apiUrl + zipCodeQuery.replace("{code}", zipCode) + apiKey;
@@ -17,7 +21,7 @@ const getWeatherData = async (e) => {
       if (response.ok) {
         return response.json();
       }
-      throw new Error("invalid zip code");
+      throw new Error("Invalid zip code");
     })
     .then(postWeatherDataEntry)
     .then(getRecentWeatherEntry)
@@ -70,6 +74,18 @@ const handleError = (error) => {
   document.querySelector("#showResult").classList.add("HideDiv");
   document.querySelector("#showError").classList.remove("HideDiv");
   document.querySelector("#errorMessage").innerText = error;
+};
+
+const validateData = () => {
+  document.querySelector("#invalidZipCode").innerText = "";
+  const zipCode = document.querySelector("#zip").value;
+  const regex = /[0-9]/g;
+  if (!zipCode.match(regex)) {
+    document.querySelector("#invalidZipCode").innerText = "Invalid zip code";
+    document.querySelector("#showResult").classList.add("HideDiv");
+    return false;
+  }
+  return true;
 };
 
 // Event listener to add function to existing HTML DOM element

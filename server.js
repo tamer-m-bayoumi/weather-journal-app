@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-let weatherEntries = [];
+let projectData = {};
 
 // Express to run server and routes
 import express from "express";
@@ -34,12 +34,12 @@ app.listen(port, listening);
 
 // Respond with JS object when a GET request is made to get the recent weather entry
 app.get("/getRecentWeatherEntry", function (req, res) {
-  res.send(weatherEntries.slice(-1)[0]);
+  res.send(projectData);
 });
 
 // Listen to a POST request is made to add a weather entry
 app.post("/addWeatherEntry", async function (req, res) {
-  weatherEntries.push(req.body);
+  Object.assign(projectData, req.body)
   res.send({
     message: "The weather entry added succesfuly.",
   });
